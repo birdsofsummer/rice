@@ -1,11 +1,31 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, {
+        Component, 
+        Config,
+        useEffect,
+        useLayoutEffect,
+        useReducer,
+        useState,
+        useDidShow,
+        useDidHide,
+        usePullDownRefresh,
+        useReachBottom,
+        usePageScroll,
+        useResize,
+        useShareAppMessage,
+        useTabItemTap,
+        useRouter,
+        useScope,
+        useRef,
+        useCallback,
+        useMemo,
+        useImperativeHandle,
+        useContext
+} from '@tarojs/taro'
 import 'taro-ui/dist/style/index.scss'
 import _ from "lodash"
 import { fromEvent, } from "rxjs"
 import { upload_cos, } from "../../http/cos.ts"
 import 'taro-ui/dist/style/index.scss'
-
-
 
 
 const cos2ck=({Location})=>{
@@ -178,7 +198,14 @@ const Reply=({
 
 
 
-const Article1=({
+
+function useAsyncEffect (effect: () => Promise<any>, deps?: DependencyList) {
+  useEffect(() => {
+    effect()
+  }, deps)
+}
+
+function Article1({
         b=console.log
 
         id= 1,
@@ -200,8 +227,36 @@ const Article1=({
         Likes=[],
         Dislikes=[],
         Reports=[],
-}) =>(
+}) {
 
+   const [like,setlike]=useReducer(({status,data},action)=> {
+       switch(action.status){
+           case true:
+                return {status:false,data:[...data,UserId]}
+           default:
+                return {status:true,data:data.filter(x=>x!=UserId)}
+       }
+    }, {status:true,data:Likes})
+
+    //const [like, setlike] = useState(Likes);
+    const [dislike, setdislike] = useState(Dislikes);
+    const [fav, setfav] = useState(Favors);
+    const [report, setreport] = useState(Reports);
+
+//    useEffect(
+//        async () => {
+//        try {
+//            let r=await fetch('/dislike').then(x=>x.text())
+//            console.log('zzzzzzzzzzzzzz',r)
+//        } catch (error) {
+//          Taro.showToast({
+//            title: '载入远程数据错误'
+//          })
+//        }
+//      },[])
+
+
+    return (
         <AtCard
           title={title}
           note={""}
@@ -239,41 +294,77 @@ const Article1=({
 
 
             <View>
-                <AtBadge value={Likes.length} >
-                    <AtButton size='small'>
-                            <View className='at-icon at-icon-heart'></View>
+                <AtBadge value={like.data.length}>
+                    <AtButton 
+                    size='small'  
+                    onClick={
+                        (e)=>{
+                            setlike(like)
+                            console.log("like",id,like) 
+                        }
+                    }
+                    >
+                        <View className='at-icon at-icon-heart'></View>
                     </AtButton>
                 </AtBadge>
 
-                <AtBadge value={Favors.length} >
-                    <AtButton size='small'>
+                <AtBadge value={fav.length} >
+                    <AtButton size='small'
+                     onClick={
+                        ()=>{ 
+                            setfav([...fav,UserId])
+                            console.log("favor",id,fav) }
+                     }
+                    >
                             <View className='at-icon at-icon-star'></View>
                     </AtButton>
                 </AtBadge>
 
 
-                <AtBadge value={Dislikes.length} >
-                    <AtButton size='small'>
+                <AtBadge value={dislike.length}>
+                    <AtButton size='small'
+                       onClick={
+                        ()=>{ 
+                            setdislike([...dislike,UserId])
+                            console.log("dislike",id,dislike) 
+                        }
+                    }
+                    >
                             <View className='at-icon at-icon-trash'></View>
                     </AtButton>
                 </AtBadge>
 
-                <AtBadge value={Favors.length} >
-                    <AtButton size='small'>
+                <AtBadge value={fav.length} >
+                    <AtButton size='small'
+                      onClick={
+                        ()=>{ 
+                            setfav([...fav,UserId])
+                            console.log("share",id,fav) 
+                        }
+                     }
+                    >
                         <View className='at-icon at-icon-share'></View>
                     </AtButton>
                 </AtBadge>
 
-                <AtBadge value={Reports.length} >
-                    <AtButton size='small'>
+                <AtBadge value={report.length} >
+                    <AtButton size='small'
+                       onClick={
+                        ()=>{ 
+                            setreport([...report,UserId])
+                            console.log("report",id,report) 
+                        }
+                     }
+                    >
                         <View className='at-icon at-icon-streaming'></View>
                     </AtButton>
                 </AtBadge>
-
             </View>
 
 </AtCard>
 )
+}
+
 
 
 export default class Index extends Component {
