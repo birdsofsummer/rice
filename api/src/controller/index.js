@@ -371,27 +371,32 @@ const doc={
     create1:(where={},defaults={})=>Doc.findOrCreate({where,defaults}).then(tojson),
     creates:(d=[])=>Doc.bulkCreate(d).then(tojsons),
     del:(where={})=>Doc.destroy({where}),
-    find:(where={})=>Doc.findOne({where,include:[{all:true}]}).then(tojson),
+    find:(where={})=>Doc.findOne({
+        where,
+        include:[
+            {all:true},
+        ],
+    }).then(tojson),
     findbyid:(id)=>Doc.findByPk(id).then(tojson),
     findbyids:(ids=[])=>Doc.findAll({where:{id:ids}}).then(tojsons),
     list:(d=[],offset=0,limit=100,)=>Doc.findAll({
-    where:{
-        'tag':{[Op.contains]:d}
-    },
-    order: [
-        ['id', 'DESC'],
-        ['createdAt', 'DESC'],
-        ['updatedAt', 'DESC'],
-    ],
-    include: [
-            { model: User, },
-            { model: Reply, },
-            { model: Like, },
-            { model: Dislike, },
-            { model: Favor, },
-            { model: Report, },
+        where:{
+            'tag':{[Op.contains]:d}
+        },
+        order: [
+            ['id', 'DESC'],
+            ['createdAt', 'DESC'],
+            ['updatedAt', 'DESC'],
         ],
-    }).then(tojsons),
+        include: [
+                { model: User, },
+                { model: Reply, },
+                { model: Like, },
+                { model: Dislike, },
+                { model: Favor, },
+                { model: Report, },
+            ],
+        }).then(tojsons),
     update:(d={},where={})=>Doc.update(d,{where}), //[1]
     count:(where={})=>Doc.count({where}),
     client:Doc,

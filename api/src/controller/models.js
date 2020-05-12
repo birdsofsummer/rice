@@ -165,7 +165,12 @@ const reply={
         allowNull:true,
         unique:false,
     },
-    //like:ARRAY,
+    like:{
+        type:ARRAY(INTEGER),
+        defaultValue:[],
+        allowNull:false,
+        unique:false,
+    },
 }
 
 const like={

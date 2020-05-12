@@ -107,7 +107,7 @@ const put=async (u="/",d={}) =>{
         .put(u1)
         .send(d)
         .type('json')
-        return say1(r.body)
+        return say(r.body)
 }
 
 
@@ -118,7 +118,7 @@ const remove=async (u="/",d={}) =>{
         .delete(u1)
         .send(d)
         .type('json')
-        return say1(r.body)
+        return say(r.body)
 }
 
 
@@ -129,16 +129,24 @@ const remove=async (u="/",d={}) =>{
 
 ///........................................
 
-const create_doc=async (d={}) =>{
+const login=(d={})=>post("/login",d)
+
+const list_doc=(q={})=>get("/doc",q)
+const show_doc=async (id="0") =>get("/doc",{id})
+
+const create_doc=(d={}) =>{
      let tag=find_tag(d.title,d.content)
      d.tag=tag
      return post("/doc",d)
 }
-const show_doc=async (id="0") =>get("/doc",{id})
-const create_reply=async (d={})=>post("/reply",d)
-const list_doc=async (q={})=>get("/doc",q)
-const login=async (d={})=>post("/login",d)
 
+const create_reply=(d={})=>post("/reply",d)
+const remove_reply=(d={})=>remove("/like",d)
+const like_reply=(d={})=>post("/like_reply",d)
+const remove_like_reply=(d={})=>remove("like_reply",d)
+
+const create_like=(d={})=>post("/like",d)
+const remove_like=(d=[])=>remove("/like",d)
 
 export {
     qs,
@@ -146,9 +154,17 @@ export {
     post,
     html2text,
 
-    create_doc,
-    show_doc,
-    list_doc,
     login,
+
+    list_doc,
+    show_doc,
+    create_doc,
+
     create_reply,
+    remove_reply,
+    like_reply,
+    remove_like_reply,
+
+    create_like,
+    remove_like,
 }

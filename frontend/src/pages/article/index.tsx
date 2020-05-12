@@ -161,10 +161,14 @@ import {
 
 import {
     show_doc,
+
     create_reply,
+    like_reply,
+    remove_like_reply,
+
+    create_like,
+    remove_like,
 } from "../../http"
-
-
 
 
 const Reply=({
@@ -174,6 +178,7 @@ const Reply=({
               createdAt,
               updatedAt,
               UserId=1,
+              like=[],
               User:{
                   user_name="西江月",
                   avatar="",
@@ -189,9 +194,19 @@ const Reply=({
                      <AtAvatar circle text={user_name}></AtAvatar> 
                      <article dangerouslySetInnerHTML={{__html:content}} />
                      <AtDivider content='' />
-                     <View className='at-row at-row__justify--end'>
-                          <View className='at-col at-col-1'><AtButton size='small'  onClick={()=>console.log('like',id)} >赞</AtButton></View>
-                          <View className='at-col at-col-1'><AtButton size='small'  onClick={()=>console.log('reply',id)}>回应</AtButton></View>
+                     <View className='at-row at-row__justify--start'>
+                        <View className='at-icon at-icon-heart'
+                            style={{ color: like.length ? "#ca3232" : "grey" }}
+                            onClick={
+                            async (e)=>{
+
+                                let d={id,UserId,}
+                                console.log('like',d)
+                                let r=await like_reply(d)
+                                console.log('lllllllll',r)
+                            }
+                        }
+                        >{ like.length || "" }</View>
                      </View>
                 </AtCard>
                 )
@@ -199,11 +214,6 @@ const Reply=({
 
 
 
-function useAsyncEffect (effect: () => Promise<any>, deps?: DependencyList) {
-  useEffect(() => {
-    effect()
-  }, deps)
-}
 
 function Article1({
         b=console.log
@@ -229,32 +239,54 @@ function Article1({
         Reports=[],
 }) {
 
-   const [like,setlike]=useReducer(({status,data},action)=> {
-       switch(action.status){
-           case true:
-                return {status:false,data:[...data,UserId]}
-           default:
-                return {status:true,data:data.filter(x=>x!=UserId)}
-       }
-    }, {status:true,data:Likes})
+ //  const [like,setlike]=useReducer(({
+ //          status=true,
+ //          data=[],
+ //          id=0,
+ //      },action)=> {
+ //      switch(action.status){
+ //          case true:
+ //               return {
+ //                   status:false,
+ //                   data,
+ //                   id,
+ //              }
+ //          default:
+ //               return {
+ //                   status:true,
+ //                   data,
+ //                   id,
+ //               }
+ //      }
+ //   }, {
+ //       status:true,
+ //       data:Likes,
+ //       id:0,
+ //   })
 
-    //const [like, setlike] = useState(Likes);
+
+
+
+    const [like, setlike] = useState({ status:true, data:Likes, id:0, });
     const [dislike, setdislike] = useState(Dislikes);
     const [fav, setfav] = useState(Favors);
     const [report, setreport] = useState(Reports);
 
-//    useEffect(
-//        async () => {
-//        try {
-//            let r=await fetch('/dislike').then(x=>x.text())
-//            console.log('zzzzzzzzzzzzzz',r)
-//        } catch (error) {
-//          Taro.showToast({
-//            title: '载入远程数据错误'
-//          })
-//        }
-//      },[])
-
+    useEffect(()=> {
+        console.log('加载了…',Likes,like)
+        if (Likes.length>0){
+            let is_like=Likes.filter(x=>x.UserId==UserId) 
+            let lid=is_like ? Likes.find(x=>x.UserId==UserId).id : 0
+            setlike({ 
+                status:lid ? false : true, 
+                data:Likes, 
+                id:lid, 
+            })
+        }
+        return () => {
+            console.log('解绑了…',Likes,like)
+        }
+    },[Likes])
 
     return (
         <AtCard
@@ -292,19 +324,41 @@ function Article1({
 
            <AtDivider content='' />
 
-
             <View>
                 <AtBadge value={like.data.length}>
                     <AtButton 
-                    size='small'  
+
+                    size='small' 
                     onClick={
-                        (e)=>{
-                            setlike(like)
+                        async (e)=>{
+                            let d={DocId:id,UserId}
                             console.log("like",id,like) 
+
+                            if (like.status==true) {
+                                let r=await create_like(d)
+                                if (!r.id) return 
+                                setlike({
+                                    data:[...like.data,r],
+                                    id:r.id,
+                                    status:false
+                                })
+                            }else{
+                                let l=like.id
+                                let r=await remove_like({ids:[l]})
+                                if (r!=1) return
+                                setlike({
+                                    //data:like.data.filter(x=>x.UserId!=UserId),
+                                    data:like.data.filter(x=>x.id!=l),
+                                    id:0,
+                                    status:true,
+                               })
+                            }
                         }
                     }
                     >
-                        <View className='at-icon at-icon-heart'></View>
+                        <View className='at-icon at-icon-heart'
+                            style={{ color: like.status ? "grey" : "#ca3232" }}
+                        ></View>
                     </AtButton>
                 </AtBadge>
 
