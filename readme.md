@@ -11,6 +11,8 @@ npm run start
 npm run build
 
 ```
+### [前端 admin](https://rice-admin-1252957949.cos-website.ap-beijing.myqcloud.com/)
+
 
 
 
