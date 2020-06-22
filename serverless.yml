@@ -10,7 +10,7 @@ frontend:
     code:
       src: dist
       root: frontend
-      hook: npm run build
+      hook: echo npm run build
       envPath: src
     env:
       # get api url after below api service deployed.
@@ -28,7 +28,7 @@ admin:
     code:
       src: dist/admin
       root: admin
-      hook: npm run build
+      hook: echo npm run build
       envPath: src
     env:
       # get api url after below api service deployed.
