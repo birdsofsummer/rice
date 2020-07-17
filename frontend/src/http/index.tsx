@@ -6,7 +6,11 @@ import _ from "lodash"
 import Taro, { Component, Config } from '@tarojs/taro'
 import superagent from "superagent"
 
-const HOST="https://service-ack2xrtt-1252957949.bj.apigw.tencentcs.com/release"
+
+
+//window.env.apiUrl
+const HOST="https://service-fx4zyvl7-1252957949.bj.apigw.tencentcs.com/release"
+
 
 const  html2text=(t="")=>{
     if (/<\//.test(t)){

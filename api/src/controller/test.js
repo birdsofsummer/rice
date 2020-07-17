@@ -135,9 +135,11 @@ test=async ()=>{
 
 test2=async ()=>{
     process.env.NODE_ENV="production"
-    process.env.PG_CONNECT_STRING=process.env.rice_pg
-    a=require("./index")
-    a.user.create({"user_name":"🌾学家"})
+ // process.env.PG_CONNECT_STRING="....."
+    let a=require("./index")
+    r1=await a.db.init_db(true)
+    r2=await a.user.create({"user_name":"🌾学家"})
+    r3=await a.db.init_doc()
 }
 
 

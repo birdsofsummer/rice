@@ -467,8 +467,9 @@ export default class Index extends Component {
               console.log({name,active})
               let s=this.state
               s.tags.forEach(x=>{
-                 if x.name==name
-                 x.active=!x.active
+                 if (x.name==name){
+                    x.active=!x.active
+                 }
               })
               this.setState(s)
                 Taro.navigateTo({
@@ -482,7 +483,7 @@ export default class Index extends Component {
             })
           }
 
-          check_tag=(e){
+          check_tag(e){
                 console.log("ccc",e)
                 let s=this.state
                 s.post.tag=e
@@ -545,17 +546,15 @@ export default class Index extends Component {
     return (
       <View className="index">
 
-      <View className="title" onClick={()=>{
+      <View className="title" 
+            onClick={()=>{
                 Taro.navigateTo({
                   url: '/pages/index/index'
-              })
+            })
       }}>{this.state.title}</View>
 
 
         <View className="content">
-
-
-
 
             <AtActionSheet
                 cancelText='取消'
@@ -664,12 +663,12 @@ export default class Index extends Component {
                 isSwitch
                 onSwitchChange={this.viewDetail}
                 onClick={
-                ()=>{
-                    console.log('kkkkk',title,User)
-                    Taro.navigateTo({
-                      url: '/pages/article/index?id='+id
-                    })
-                }
+                    ()=>{
+                        console.log('kkkkk',title,User)
+                        Taro.navigateTo({
+                          url: '/pages/article/index?id='+id
+                        })
+                    }
                 }
                 title={title}
                 note={
@@ -683,11 +682,10 @@ export default class Index extends Component {
                 }
                 extraText={[User? User.user_name : this.state.User.avatar].join('|')}
                 thumb={User ? User.avatar: this.state.User.avatar }
-
                 hasBorder={true}
                 arrow='right'
             />
-            )
+            ))
          }
         </AtList>
         <AtPagination 

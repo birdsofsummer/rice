@@ -39,7 +39,8 @@ api:
   # refer to: https://github.com/serverless-components/tencent-express/blob/master/docs/configure.md
   inputs:
     region: ${env.REGION}
-    runtime: Nodejs12.16
+    #runtime: Nodejs12.16
+    runtime: Nodejs8.9
     code: ./api
     functionName: ${name}
     role: QCS_SCFExcuteRole
