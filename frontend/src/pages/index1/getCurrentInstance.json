@@ -1,0 +1,45 @@
+{
+	"app": {
+		"config": {
+			"router": {
+				"pathname": "/pages/index1/index"
+			},
+			"pages": [
+				"pages/index1/index"
+			],
+			"window": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "WeChat",
+				"navigationBarTextStyle": "black"
+			},
+			"routes": [
+				{
+					"path": "pages/index1/index",
+					"navigationBarTitleText": "首页"
+				}
+			]
+		}
+	},
+	"router": {
+		"params": {
+			"a": "1",
+			"b": "2"
+		},
+		"path": "",
+		"onReady": "/pages/index1/index?a=1&b=2.onReady",
+		"onShow": "/pages/index1/index?a=1&b=2.onShow",
+		"onHide": "/pages/index1/index?a=1&b=2.onHide"
+	},
+	"page": {
+		"data": {},
+		"path": "/pages/index1/index?a=1&b=2",
+		"config": {
+			"navigationBarTitleText": "首页"
+		},
+		"options": {
+			"a": "1",
+			"b": "2"
+		}
+	}
+}

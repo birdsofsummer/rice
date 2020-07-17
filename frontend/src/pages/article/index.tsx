@@ -216,7 +216,7 @@ const Reply=({
 
 
 function Article1({
-        b=console.log
+        b=console.log,
 
         id= 1,
         UserId= 1,

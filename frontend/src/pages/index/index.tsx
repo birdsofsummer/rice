@@ -1,4 +1,6 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import React, { Component } from 'react'
+import { observer, inject } from 'mobx-react'
+
 
 import{
     useContext,              //(Context, unstable_observedBits)
@@ -17,7 +19,7 @@ import{
     version
 } from "react";
 
-import 'taro-ui/dist/style/index.scss'
+//import 'taro-ui/dist/style/index.scss'
 import { 
     AtActionSheet ,
     AtActionSheetItem ,
@@ -166,8 +168,12 @@ class UploadAdapter{
    }
 }
 
+
+
+@inject('store')
+@observer
 export default class Index extends Component {
-  super(...arguments);
+  //super(...arguments);
   state = {
         title: ' 🌾 🌾花香里说丰年',
         loaded: true,
@@ -270,17 +276,6 @@ export default class Index extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
-
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
-      config: Config = {
-            navigationBarTitleText: '🌾花香里说丰年🌾 🌾🌾 🌾'
-      }
 
       say=e=>{
           console.log(e)

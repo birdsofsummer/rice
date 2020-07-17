@@ -3,7 +3,7 @@
 
 
 import _ from "lodash"
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import superagent from "superagent"
 
 
