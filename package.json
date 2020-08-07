@@ -1,0 +1,29 @@
+{
+  "name": "fullstack-application-taro",
+  "version": "0.1.0",
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap.js",
+    "dev": "cd frontend && npm run start"
+  },
+  "dependencies": {
+    "@serverless/tencent-express": "^2.3.3",
+    "@serverless/tencent-website": "^1.2.23"
+  },
+  "devDependencies": {
+    "@serverless/eslint-config": "^1.2.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "prettier": "^1.19.1"
+  },
+  "eslintConfig": {
+    "extends": "@serverless/eslint-config/node",
+    "root": true,
+    "parserOptions": {
+      "ecmaVersion": 2020
+    }
+  },
+  "eslintIgnore": [
+    "node_modules"
+  ],
+  "license": "MIT"
+}

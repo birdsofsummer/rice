@@ -1,0 +1,47 @@
+    <div class="send-request">
+      <button nz-button nzType="primary"  (click)="sendRequest()">
+        refresh
+      </button>
+      <span>Selected {{ setOfCheckedId.size }} items</span>
+
+    </div>
+
+    <nz-table
+      #rowSelectionTable
+      nzShowPagination
+      nzShowSizeChanger
+      [nzData]="listOfData"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+      [nzLoading]="loading" 
+    >
+      <thead>
+        <tr>
+          <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let data of rowSelectionTable.data">
+          <td
+            [nzChecked]="setOfCheckedId.has(data.id)"
+            [nzDisabled]="data.disabled"
+            (nzCheckedChange)="onItemChecked(data.id, $event)"
+          ></td>
+          <td>{{ data.name }}</td>
+          <td>{{ data.age }}</td>
+          <td>{{ data.address }}</td>
+
+          <td>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a>Delete</a>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </nz-table>
+

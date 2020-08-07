@@ -1,0 +1,84 @@
+name: rice
+
+frontend:
+  component: '@serverless/tencent-website'
+  # refer to: https://github.com/serverless-components/tencent-website/blob/master/docs/configure.md
+  inputs:
+    region: ${env.REGION}
+    bucketName: ${name}
+    protocol: https
+    code:
+      src: dist
+      root: frontend
+      hook: echo npm run build
+      envPath: src
+    env:
+      # get api url after below api service deployed.
+      apiUrl: ${api.url}
+
+
+
+admin:
+  component: '@serverless/tencent-website'
+  # refer to: https://github.com/serverless-components/tencent-website/blob/master/docs/configure.md
+  inputs:
+    region: ${env.REGION}
+    bucketName: rice-admin
+    protocol: https
+    code:
+      src: dist/admin
+      root: admin
+      hook: echo npm run build
+      envPath: src
+    env:
+      # get api url after below api service deployed.
+      apiUrl: ${api.url}
+
+api:
+  component: '@serverless/tencent-express'
+  # refer to: https://github.com/serverless-components/tencent-express/blob/master/docs/configure.md
+  inputs:
+    region: ${env.REGION}
+    #runtime: Nodejs12.16
+    runtime: Nodejs8.9
+    code: ./api
+    functionName: ${name}
+    role: QCS_SCFExcuteRole
+    functionConf:
+      timeout: 30
+      memorySize: 128
+      vpcConfig:
+        vpcId: ${vpc.vpcId}
+        subnetId: ${vpc.subnetId}
+        publicNetConfig: 
+            publicNetStatus: enable
+      environment:
+        variables:
+          PG_CONNECT_STRING: ${postgresql.public.connectionString}
+          PG_CONNECT_STRING1: ${postgresql.private.connectionString}
+          NODE_ENV: production
+    apigatewayConf:
+      protocols:
+        - http
+        - https
+
+postgresql:
+  component: '@serverless/tencent-postgresql'
+  # refer to: https://github.com/serverless-components/tencent-postgresql/blob/master/docs/configure.md
+  inputs:
+    region: ${env.REGION}
+    zone: ${env.ZONE}
+    dBInstanceName: serverless
+    extranetAccess: true
+    vpcConfig:
+      vpcId: ${vpc.vpcId}
+      subnetId: ${vpc.subnetId}
+
+vpc:
+  component: '@serverless/tencent-vpc'
+  # refer to: https://github.com/serverless-components/tencent-vpc/blob/master/docs/configure.md
+  inputs:
+    region: ${env.REGION}
+    zone: ${env.ZONE}
+    vpcName: serverlessVpc
+    subnetName: serverlessSubnet
